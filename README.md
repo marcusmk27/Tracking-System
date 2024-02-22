@@ -1,2 +1,19 @@
-# Tracking-System
-this system is opening new issues/cases and also tracking progress of the issues logged so that they are closed on time
+Title
+
+Table of Contents
+General Info
+Technologies used
+Features
+Setup
+Usage
+Project staus
+Room for improvement
+
+General Info
+Technologies used
+Features
+Setup
+Usage
+Project staus
+Room for improvement
+##Acknowledgement
