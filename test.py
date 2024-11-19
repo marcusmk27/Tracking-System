@@ -18,7 +18,8 @@ def view_all_issues():
     cursor = conn.cursor()
     cursor.execute('SELECT * FROM  issues')
     data = cursor.fetchall()
-    return data
+    column_names = [description[0] for description in cursor.description]
+    return data,column_names
 
 
 # function to view current issues status
@@ -35,7 +36,9 @@ df_status=pd.DataFrame(view_all_issues_status(),columns=['Issue_Status'])
 def get_db_connection():
     conn = sqlite3.connect('database.db')
     conn.row_factory = sqlite3.Row
-    return conn
+    return conn 
+
+
 # Function to sign up a new user
 def signup(username, password):
     conn = get_db_connection()
@@ -49,6 +52,8 @@ def signup(username, password):
 
 #
 # Function to log in a user
+
+ 
 def login(username, password):
     conn = get_db_connection()
     cursor = conn.cursor()
@@ -128,15 +133,16 @@ def main():
     page = st.sidebar.radio("Navigation", ["Login", "View Current Issues", "Log Issue", "Update Issue"])
     if page=='View Current Issues':
        
-
-        df=pd.DataFrame(view_all_issues(),columns=["ID",'issue_code','name',' description','issue_status','risk_type','subrisk_type','entities','bu_rating','agl_rating','assurance_provider','due_date','financially_implicated','risk_event_type',' additional_evidence',' file_contents','issue_owner_name','issuer_surname','issuer_email','username'])
+        data,columns=view_all_issues()
+        df=pd.DataFrame(data,columns=columns)
+        #df=pd.DataFrame(view_all_issues(),columns=['issue_code','name',' description','issue_status','risk_type','subrisk_type','entities','bu_rating','agl_rating','assurance_provider','due_date','financially_implicated','risk_event_type',' additional_evidence',' file_contents','issue_owner_name','issuer_surname','issuer_email','username'])
         dffiltered=st.text_input("...")
         df_fil=df[df['issue_code']==dffiltered]
         src_btn=st.button("Search")
         if src_btn==True:
             st.table(df_fil)
         else:
-            st.table(df.tail(5))
+            st.table(df.head(5))
         #st.write(view_all_issues())
     # if page == "Signup":
     #     st.header("Signup")
@@ -219,7 +225,9 @@ def main():
     elif page == "Update Issue":
         st.header("Update Issue")
         st.subheader("Mian Table")
-        df=pd.DataFrame(view_all_issues(),columns=["ID",'issue_code','name',' description','issue_status','risk_type','subrisk_type','entities','bu_rating','agl_rating','assurance_provider','due_date','financially_implicated','risk_event_type',' additional_evidence',' file_contents','issue_owner_name','issuer_surname','issuer_email','username'])
+        data,columns=view_all_issues()
+        df=pd.DataFrame(data,columns=columns)
+        #df=pd.DataFrame(view_all_issues(),columns=['issue_code','name',' description','issue_status','risk_type','subrisk_type','entities','bu_rating','agl_rating','assurance_provider','due_date','financially_implicated','risk_event_type',' additional_evidence',' file_contents','issue_owner_name','issuer_surname','issuer_email','username'])
         dffiltered=st.text_input("...")
         df_fil=df[df['issue_code']==dffiltered]
         src_btn=st.button("Search")
