@@ -1,4 +1,4 @@
 streamlit 
-sqlite
+sqlite3=2.6.0
 pandas
 hashlib
