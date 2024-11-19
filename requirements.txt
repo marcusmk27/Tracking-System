@@ -1,4 +1,4 @@
-streamlit t 
+streamlit 
 sqlite3
 pandas
 hashlib
