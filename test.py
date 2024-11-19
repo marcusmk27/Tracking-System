@@ -132,6 +132,9 @@ def main():
     create_table()
 
     st.title("Issue Tracker App")
+    # Display the image below the title
+    image_path = "C:/Users/ab0295s/Desktop/ICP_System/Absa-rebrand-artboard-01-logo-e1532702773207.png"
+    st.image(image_path, caption="Welcome to the Issue Tracker App!", use_column_width=True)
 
     # Sidebar
     page = st.sidebar.radio("Navigation", ["Login", "View Current Issues", "Log Issue", "Update Issue"])
