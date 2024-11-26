@@ -8,7 +8,9 @@ import random
 
 # Function to create a SQLite database connection
 def create_connection():
-    conn = sqlite3.connect("issues.db")
+   # conn = sqlite3.connect("issues.db")
+    # Create the SQL connection to pets_db as specified in your secrets file.
+    conn = st.connection('issues.db', type='sql')
     return conn
 
 
