@@ -8,7 +8,7 @@ import random
 
 # Function to create a SQLite database connection
 def create_connection():
-    conn = sqlite3.connect("issues20240202.db")
+    conn = sqlite3.connect("issues.db")
     return conn
 
 
