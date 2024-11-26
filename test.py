@@ -1,7 +1,3 @@
-__import__('pysqlite3')
-import sys
-
-sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
 import streamlit as st
 import sqlite3
 from hashlib import sha256
@@ -54,10 +50,7 @@ def signup(username, password):
     conn.commit()
     conn.close()
 
-#
 # Function to log in a user
-
- 
 def login(username, password):
     conn = get_db_connection()
     cursor = conn.cursor()
@@ -231,7 +224,7 @@ def main():
 
     elif page == "Update Issue":
         st.header("Update Issue")
-        st.subheader("Mian Table")
+        st.subheader("Main Table")
         data,columns=view_all_issues()
         df=pd.DataFrame(data,columns=columns)
         #df=pd.DataFrame(view_all_issues(),columns=['issue_code','name',' description','issue_status','risk_type','subrisk_type','entities','bu_rating','agl_rating','assurance_provider','due_date','financially_implicated','risk_event_type',' additional_evidence',' file_contents','issue_owner_name','issuer_surname','issuer_email','username'])
@@ -257,7 +250,7 @@ def main():
                     issue_id = st.text_input("Enter Issue ID",key='id')
                     new_issue =st.selectbox("Status",options=["Open", "Closed", "Risk Accepted", "Overdue"]) #st.text_area("Describe the updated issue",key=20)
                     if st.button("Update Issue Status"):
-                        update_issue_status(issue_id, new_issue)
+                        update_issue(issue_id, new_issue)
                         st.success("Issue updated successfully!")
             else:
                 st.warning("Please login to update an issue.")
