@@ -1,318 +1,227 @@
 import streamlit as st
-import sqlite3
-from hashlib import sha256
 import pandas as pd
-#from auth import sign
 import random
+from hashlib import sha256
+import os
+import hashlib
 
+# Paths to your CSV files
+ISSUES_FILE = 'C:/Users/AB033NI/Downloads/New folder 1/New folder/issues.csv'
+USERS_FILE = 'C:/Users/AB033NI/Downloads/New folder 1/New folder/users.csv'
 
-# Function to create a SQLite database connection
-def create_connection():
-   # conn = sqlite3.connect("issues.db")
-    # Create the SQL connection to pets_db as specified in your secrets file.
-    conn = st.connection('issues.db', type='sql')
-    return conn
+# Helper function to read issues from CSV
+def read_issues_from_csv():
+    if os.path.exists(ISSUES_FILE):
+        return pd.read_csv(ISSUES_FILE,delimiter=";")
+    else:
+        # If the file does not exist, return an empty DataFrame
+        return pd.DataFrame()
 
+# Helper function to save issues to CSV
+def save_issues_to_csv(df):
+    df.to_csv(ISSUES_FILE, index=False)
 
-# function to view current issues
-def view_all_issues():
-    conn = create_connection()
-    cursor = conn.cursor()
-    cursor.execute('SELECT * FROM  issues')
-    data = cursor.fetchall()
-    column_names = [description[0] for description in cursor.description]
-    return data,column_names
+# Helper function to read users from CSV
+def read_users_from_csv():
+    if os.path.exists(USERS_FILE):
+        return pd.read_csv(USERS_FILE,delimiter=";")
+    else:
+        return pd.DataFrame()
 
-
-# function to view current issues status
-def view_all_issues_status():
-    conn = create_connection()
-    cursor = conn.cursor()
-    cursor.execute('SELECT issue_status FROM  issues')
-    data = cursor.fetchall()
-    return data
-
-df_status=pd.DataFrame(view_all_issues_status(),columns=['Issue_Status'])
-# Function to create a table for  new user
-# Function to create a table for  new user
-def get_db_connection():
-    conn = sqlite3.connect('database.db')
-    conn.row_factory = sqlite3.Row
-    return conn 
-
+# Helper function to save users to CSV
+def save_users_to_csv(df):
+    df.to_csv(USERS_FILE, index=False)
 
 # Function to sign up a new user
 def signup(username, password):
-    conn = get_db_connection()
-    cursor = conn.cursor()
+    users_df = read_users_from_csv()
 
-    hashed_password = password
-    cursor.execute("INSERT INTO  users  (username, password) VALUES (?, ?)", (username, hashed_password))
-
-    conn.commit()
-    conn.close()
-
+    # Hash the password before saving
+    hashed_password = sha256(password.encode('utf-8')).hexdigest()
+    
+    # Append the new user data
+    users_df = users_df.append({'username': username, 'password': hashed_password}, ignore_index=True)
+    
+    save_users_to_csv(users_df)
+    return "Signup successful!"
+# Function to hash passwords (SHA256)
+def hash_password(password):
+    return hashlib.sha256(password.encode('utf-8')).hexdigest()
 # Function to log in a user
 def login(username, password):
-    conn = get_db_connection()
-    cursor = conn.cursor()
+    users_df = read_users_from_csv()
+    #hashed_password = hash_password() #sha256(password.encode('utf-8')).hexdigest()
+    
+    user = users_df[users_df['username'] == username]
+    if not user.empty and user['password'].values[0] :#== hashed_password:
+        return True
+    return False
 
-    hashed_password = password
-    cursor.execute("SELECT * FROM  users  WHERE username=? AND password=?", (username, hashed_password))
-    user = cursor.fetchone()
-
-    conn.close()
-    return user
-
-
-
-
-
-
-# Function to create the issues table
-def create_table():
-    conn = create_connection()
-    cursor = conn.cursor()
-
-    cursor.execute('''
-        CREATE TABLE IF NOT EXISTS issues (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            issue_code VARCHAR(4) UNIQUE,
-            name VARCHAR(255),
-            description TEXT,
-            issue_status VARCHAR(50),
-            risk_type VARCHAR(50),
-            subrisk_type VARCHAR(50),
-            entities VARCHAR(255),
-            bu_rating VARCHAR(50),
-            agl_rating VARCHAR(50),
-            assurance_provider VARCHAR(255),
-            due_date DATE,
-            financially_implicated BOOLEAN,
-            risk_event_type VARCHAR(255),
-            additional_evidence TEXT,
-            file_contents VARCHAR(255),
-            issue_owner_name VARCHAR(255),
-            issuer_surname VARCHAR(255),
-            issuer_email VARCHAR(255),
-            username TEXT Varchar(255)      
-        )
-    ''')
-
-    conn.commit()
-    conn.close()
-# Functions to fetch issue code and generate new code from the database start here
+# Function to generate a unique code for an issue
 def generate_unique_code():
+    issues_df = read_issues_from_csv()
     while True:
         # Generate a random four-digit code
         code = str(random.randint(1000, 9999))
 
-        # Check if the code is unique in the database
-        if not is_code_exists(code):
+        # Check if the code already exists in the CSV
+        if code not in issues_df['issue_code'].values:
             return code
- 
-def is_code_exists(code):
-    #Check if the code exists in the 'issues' table
-    conn = create_connection()
-    cursor = conn.cursor()
-    cursor.execute("SELECT COUNT(*) FROM issues WHERE issue_code = ?", (code,))
-    count = cursor.fetchone()[0]
-    return count > 0
-    
 
-#Function end here :)
+# Function to log an issue
+import pandas as pd
+
+# Function to log an issue (fixing the append issue)
+def log_issue(issue_code, name, description, issue_status, risk_type, subrisk_type, bu_rating,
+              agl_rating, assurance_provider, due_date, financially_implicated, issuer_surname, 
+              issuer_email, username):
+
+    # Assuming 'issues.csv' is the file where you are saving your issues
+    try:
+        # Read the existing issues from the CSV
+        issues_df = pd.read_csv('issues.csv')
+
+        # Create a new DataFrame for the new issue
+        new_issue = pd.DataFrame([{
+            'issue_code': issue_code,
+            'name': name,
+            'description': description,
+            'issue_status': issue_status,
+            'risk_type': risk_type,
+            'subrisk_type': subrisk_type,
+            'bu_rating': bu_rating,
+            'agl_rating': agl_rating,
+            'assurance_provider': assurance_provider,
+            'due_date': due_date,
+            'financially_implicated': financially_implicated,
+            'issuer_surname': issuer_surname,
+            'issuer_email': issuer_email,
+            'username': username
+        }])
+
+        # Use pd.concat() to append the new issue to the existing DataFrame
+        issues_df = pd.concat([issues_df, new_issue], ignore_index=True)
+
+        # Write the updated DataFrame back to the CSV
+        issues_df.to_csv('issues.csv', index=False)
+
+        print("Issue logged successfully!")
+    except Exception as e:
+        print(f"Error logging the issue: {e}")
+
+
+
+# Function to view all issues
+def view_all_issues():
+    issues_df = read_issues_from_csv()
+    return issues_df
+
+# Function to update an issue description
+def update_issue(issue_id, new_description):
+    issues_df = read_issues_from_csv()
     
+    # Update the issue where the 'id' matches
+    issues_df.loc[issues_df['id'] == issue_id, 'description'] = new_description
+    
+    save_issues_to_csv(issues_df)
+    return "Issue description updated successfully!"
+
+# Function to update an issue status
+def update_issue_status(issue_id, issue_status, risk_type, subrisk_type, bu_rating, agl_rating,
+                        assurance_provider, due_date, financially_implicated):
+    issues_df = read_issues_from_csv()
+    
+    # Update the issue where the 'id' matches
+    issues_df.loc[issues_df['id'] == issue_id, ['issue_status', 'risk_type', 'subrisk_type', 
+                                                 'bu_rating', 'agl_rating', 'assurance_provider', 
+                                                 'due_date', 'financially_implicated']] = \
+        [issue_status, risk_type, subrisk_type, bu_rating, agl_rating, assurance_provider, due_date, financially_implicated]
+    
+    save_issues_to_csv(issues_df)
+    return "Issue status updated successfully!"
+# Function to hash passwords (SHA256)
+def hash_password(password):
+    return hashlib.sha256(password.encode()).hexdigest()
 # Streamlit UI
 def main():
-    create_table()
-
     st.title("Issue Tracker App")
-    # Display the image below the title
-    image_path = "C:/Users/ab0295s/Desktop/ICP_System/Absa-rebrand-artboard-01-logo-e1532702773207.png"
-    st.image(image_path, caption="Welcome to the Issue Tracker App!", use_column_width=True)
 
-    # Sidebar
+    # Sidebar Navigation
     page = st.sidebar.radio("Navigation", ["Login", "View Current Issues", "Log Issue", "Update Issue"])
-    if page=='View Current Issues':
-       
-        data,columns=view_all_issues()
-        df=pd.DataFrame(data,columns=columns)
-        #df=pd.DataFrame(view_all_issues(),columns=['issue_code','name',' description','issue_status','risk_type','subrisk_type','entities','bu_rating','agl_rating','assurance_provider','due_date','financially_implicated','risk_event_type',' additional_evidence',' file_contents','issue_owner_name','issuer_surname','issuer_email','username'])
-        dffiltered=st.text_input("...")
-        df_fil=df[df['issue_code']==dffiltered]
-        src_btn=st.button("Search")
-        if src_btn==True:
-            st.table(df_fil)
-        else:
-            st.table(df.head(5))
-        #st.write(view_all_issues())
-    # if page == "Signup":
-    #     st.header("Signup")
-    #     username = st.text_input("Username")
-    #     password = st.text_input("Password", type="password")
-    #     if st.button("Signup"):
-    #         signup(username, password)
-    #         st.success("Signup successful! Now you can log in.")
+    
+    if page == "View Current Issues":
+        st.header("Current Issues")
+        issues_df = view_all_issues()
+        st.write(issues_df.head(15))
 
     if page == "Login":
         st.header("Login")
         username = st.text_input("Username")
         password = st.text_input("Password", type="password")
         if st.button("Login"):
-            user = login(username, password)
-            if user:
+            if login(username, password):
                 st.session_state.username = username  # Store username in session state
-                st.success(f"Welcome, {user[1]}!")
+                st.success(f"Welcome, {username}!")
             else:
                 st.error("Invalid username or password.")
-
-    elif page == "Log Issue":
+        # Function to log in a user
+        # Capture the username and password
+        
+        
+      
+   
         st.header("Log Issue")
-        if st.session_state.get('username'):
-            # Automatically generate the issue code
+        if 'username' in st.session_state:
             issue_code = generate_unique_code()
-
-            # Display the generated code
-            st.text(f"Issue Code: {issue_code}")
+            st.text(f"Generated Issue Code: {issue_code}")
+            
             name = st.text_input("Name")
             description = st.text_area("Description")
-            issue_status =st.selectbox("Issue Status", ["Open", "Closed", "Risk Accepted", "Overdue"])
-            risk_type = st.selectbox("Risk Type", ["Operational & Resilience Risk", "Insurance risk type", "Compliance Risk", "Model Risk", "Conduct Risk"])
-            subrisk_type = st.selectbox("Subrisk Type", ["Model Uncertainty Risk", "Process Management Risk", "Supplier Risk", "Technology Risk", "Transaction Processing and Management Risk", "Underwriting Risk", "Anti-Money Laundering", "Business Continuity Risk", "Change Risk", "Conduct Risk", "Customer Engagement Risk", "Data and Records Management Risk", "Fraud Risk", "Information Security and Cyber Risk", "Insurance Exposure Risk"])
-            bu_rating = st.selectbox("BU Rating", ["Limited", "Major", "Moderate", "Critical"])
-            agl_rating = st.selectbox("AGL Rating", ["Limited", "Major", "Moderate", "Critical"])
-            assurance_provider_dropdown = st.selectbox("Assurance Provider", ["2LOD Risk", "External Audit", "Internal Audit", "GSA"])
+            issue_status = st.selectbox("Issue Status", ["Open", "Closed", "Risk Accepted", "Overdue"])
+            risk_type = st.selectbox("Risk Type", ["Operational", "Insurance", "Compliance", "Model Risk"])
+            subrisk_type = st.selectbox("Subrisk Type", ["Technology", "Compliance", "Financial", "Operational"])
+            bu_rating = st.selectbox("BU Rating", ["Limited", "Moderate", "Critical"])
+            agl_rating = st.selectbox("AGL Rating", ["Limited", "Moderate", "Critical"])
+            assurance_provider = st.selectbox("Assurance Provider", ["Internal Audit", "External Audit", "GSA"])
             due_date = st.date_input("Due Date")
-            financially_implicated = st.radio("Does the issue have a financial implication?", ["Yes", "No"])
-            issue_owner_name = st.text_input("Issue Owner Name")
-            issue_owner_surnam = st.text_input("Issue Owner surname")
-            issue_owner_email = st.text_input("Issue Owner Email Address")
-            # File attachment option for various types
-            uploaded_file = st.file_uploader("Attach a File (if applicable)", type=["pdf", "jpg", "png", "txt", "csv", "xlsx"])
-    
-            # Check if a file is uploaded
-            if uploaded_file is not None:
-                file_type = uploaded_file.name.split(".")[-1].lower()
-    
-                # Your logic for handling CSV data goes here
-                if file_type == "csv":
-                    # Handle CSV file
-                    df = pd.read_csv(uploaded_file)
-                    st.write("CSV file content:")
-                    st.dataframe(df)
-    
-                # Your logic for handling Excel data goes here
-                elif file_type in ["xlsx", "xls"]:
-                    # Handle Excel file
-                    df = pd.read_excel(uploaded_file)
-                    st.write("Excel file content:")
-                    st.dataframe(df)
-    
-                else:
-                    # Handle other file types
-                    file_contents = uploaded_file.read()
-                    st.text(f"Content of the uploaded file ({file_type}):")
-                    st.text(file_contents.decode("utf-8"))
+            financially_implicated = st.radio("Financial Implication?", ["Yes", "No"])
+            issuer_surname = st.text_input("Issuer Surname")
+            issuer_email = st.text_input("Issuer Email")
             
-            btn=st.button('Log Issue')
-            if btn==True:
-                if issue_status!= "Open":
-                  st.warning("The issue status must be 'Open' to log a new issue. Please correct the issue status.")
-                else:
-                    log_issue(issue_code, name, description,issue_status,risk_type,subrisk_type, bu_rating ,agl_rating,assurance_provider_dropdown, due_date,financially_implicated,issue_owner_name,issue_owner_surnam,issue_owner_email, st.session_state.username)
-                    st.success("Issue logged successfully!")
-            else:
-             st.warning("Please login to log an issue.")
+            if st.button("Log Issue"):
+                log_issue(issue_code, name, description, issue_status, risk_type, subrisk_type, bu_rating,
+                          agl_rating, assurance_provider, due_date, financially_implicated, issuer_surname,
+                          issuer_email, st.session_state.username)
+                st.success("Issue logged successfully!")
+                df= pd.read_csv('C:/Users/AB033NI/Downloads/New folder 1/New folder/issues.csv')
+                st.write(df.tail(20))
+        else:
+            st.warning("Please login to log an issue.")
 
     elif page == "Update Issue":
         st.header("Update Issue")
-        st.subheader("Main Table")
-        data,columns=view_all_issues()
-        df=pd.DataFrame(data,columns=columns)
-        #df=pd.DataFrame(view_all_issues(),columns=['issue_code','name',' description','issue_status','risk_type','subrisk_type','entities','bu_rating','agl_rating','assurance_provider','due_date','financially_implicated','risk_event_type',' additional_evidence',' file_contents','issue_owner_name','issuer_surname','issuer_email','username'])
-        dffiltered=st.text_input("...")
-        df_fil=df[df['issue_code']==dffiltered]
-        src_btn=st.button("Search")
-        if src_btn==True:
-            st.data_editor(df_fil)
-        else:
-            #st.table(df.tail(5))
-            st.data_editor(df)
+        issues_df = view_all_issues()
+        issue_id = st.number_input("Enter Issue ID to Update", min_value=1, max_value=len(issues_df))
+        
+        if issue_id:
+            new_description = st.text_area("New Description")
+            if st.button("Update Description"):
+                update_issue(issue_id, new_description)
+                st.success("Issue description updated successfully!")
+            
+            new_status = st.selectbox("Update Issue Status", ["Open", "Closed", "Risk Accepted", "Overdue"])
+            new_risk_type = st.selectbox("Risk Type", ["Operational", "Insurance", "Compliance", "Model Risk"])
+            new_subrisk_type = st.selectbox("Subrisk Type", ["Technology", "Compliance", "Financial", "Operational"])
+            new_bu_rating = st.selectbox("BU Rating", ["Limited", "Moderate", "Critical"])
+            new_agl_rating = st.selectbox("AGL Rating", ["Limited", "Moderate", "Critical"])
+            new_assurance_provider = st.selectbox("Assurance Provider", ["Internal Audit", "External Audit", "GSA"])
+            new_due_date = st.date_input("Due Date")
+            new_financially_implicated = st.radio("Financial Implication?", ["Yes", "No"])
 
-        if st.checkbox("Updated Description"):
-            if st.session_state.get('username'):
-                issue_id = st.text_input("Enter Issue ID")
-                new_issue = st.text_area("Describe the updated issue",key=30)
-                if st.button("Update Issue"):
-                    update_issue(issue_id, new_issue)
-                    st.success("Issue updated successfully!")
+            if st.button("Update Status"):
+                update_issue_status(issue_id, new_status, new_risk_type, new_subrisk_type, new_bu_rating,
+                                    new_agl_rating, new_assurance_provider, new_due_date, new_financially_implicated)
+                st.success("Issue status updated successfully!")
 
-            if st.checkbox("Updated Issue Status"):
-                if st.session_state.get('username'):
-                    issue_id = st.text_input("Enter Issue ID",key='id')
-                    new_issue =st.selectbox("Status",options=["Open", "Closed", "Risk Accepted", "Overdue"]) #st.text_area("Describe the updated issue",key=20)
-                    if st.button("Update Issue Status"):
-                        update_issue(issue_id, new_issue)
-                        st.success("Issue updated successfully!")
-            else:
-                st.warning("Please login to update an issue.")
-
-# Function to log an issue
-def log_issue(issue_code, name, description, issue_status,risk_type,subrisk_type, bu_rating,agl_rating,assurance_provider,due_date,financially_implicated,issuer_surname, issuer_email,username):
-    conn = create_connection()
-    cursor = conn.cursor()
-
-    cursor.execute('''
-        INSERT INTO issues (
-            issue_code, name, description,issue_status,risk_type,subrisk_type,bu_rating,agl_rating ,assurance_provider, due_date,financially_implicated,issuer_surname, issuer_email,username
-        ) VALUES (?, ?, ?, ?,?,?,?,?,?,?,?,?,?,?)
-    ''', (issue_code, name, description, issue_status,risk_type,subrisk_type, bu_rating,agl_rating,assurance_provider, due_date,financially_implicated,issuer_surname, issuer_email,username))
-
-    conn.commit()
-    conn.close()
-
-# Function to update an issue Discription
-def update_issue(issue_id, new_issue):
-    conn = create_connection()
-    cursor = conn.cursor()
-
-    cursor.execute("UPDATE issues SET description=? WHERE id=?", (new_issue, issue_id))
-
-    conn.commit()
-    conn.close()
-
-# Function to update an issue Status
-def update_issue_status(
-    issue_id, issue_status, risk_type, subrisk_type, bu_rating, 
-    agl_rating, assurance_provider, due_date, financially_implicated
-):
-    conn = create_connection()
-    cursor = conn.cursor()
-
-    query = """
-        UPDATE issues 
-        SET 
-            issue_status = ?, 
-            risk_type = ?, 
-            subrisk_type = ?, 
-            bu_rating = ?, 
-            agl_rating = ?, 
-            assurance_provider = ?, 
-            due_date = ?, 
-            financially_implicated = ?
-        WHERE id = ?
-    """
-
-    cursor.execute(query, (
-        issue_status, risk_type, subrisk_type, bu_rating, 
-        agl_rating, assurance_provider, due_date, financially_implicated, 
-        issue_id
-    ))
-
-    conn.commit()
-    conn.close()
-
-# ... (Other functions remain unchanged)
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
