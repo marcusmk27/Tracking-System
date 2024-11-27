@@ -118,7 +118,7 @@ def log_issue(issue_code, name, description, issue_status, risk_type, subrisk_ty
 
 # Function to view all issues
 def view_all_issues():
-    issues_df = pd.read_csv( 'https://github.com/marcusmk27/Tracking-System/blob/main/issues.csv')#read_issues_from_csv()
+    issues_df = pd.read_csv( 'https://github.com/marcusmk27/Tracking-System/blob/main/issues.csv',delimiter=";")#read_issues_from_csv()
     return issues_df.head()
 
 # Function to update an issue description
