@@ -84,7 +84,7 @@ def log_issue(issue_code, name, description, issue_status, risk_type, subrisk_ty
     # Assuming 'issues.csv' is the file where you are saving your issues
     try:
         # Read the existing issues from the CSV
-        issues_df = pd.read_csv('https://raw.githubusercontent.com/marcusmk27/Tracking-System/main/issues.csv',delimiter=';')
+        issues_df = pd.read_csv('https://raw.githubusercontent.com/marcusmk27/Tracking-System/main/issues.csv')
 
         # Create a new DataFrame for the new issue
         new_issue = pd.DataFrame([{
@@ -199,7 +199,7 @@ def main():
                           agl_rating, assurance_provider, due_date, financially_implicated, issuer_surname,
                           issuer_email, st.session_state.username)
                 st.success("Issue logged successfully!")
-                df= pd.read_csv('Tracking-System/blob/main/issues.csv')
+                df= pd.read_csv('https://raw.githubusercontent.com/marcusmk27/Tracking-System/main/issues.csv')
                 st.write(df.tail(20))
         else:
             st.warning("Please login to log an issue.")
