@@ -7,7 +7,7 @@ import hashlib
 
 # Paths to your CSV files
 ISSUES_FILE = 'marcusmk27/Tracking-System/blob/main/issues.csv'
-USERS_FILE = 'C:/Users/AB033NI/Downloads/New folder 1/New folder/users.csv'
+USERS_FILE = 'marcusmk27/Tracking-System/blob/main/users.csv'
 
 # Helper function to read issues from CSV
 def read_issues_from_csv():
