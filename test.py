@@ -6,7 +6,7 @@ import os
 import hashlib
 
 # Paths to your CSV files
-ISSUES_FILE = 'Tracking-System/blob/main/issues.csv'
+ISSUES_FILE = 'https://raw.githubusercontent.com/marcusmk27/Tracking-System/main/issues.csv'
 USERS_FILE = 'Tracking-System/blob/main/users.csv'
 
 # Helper function to read issues from CSV
