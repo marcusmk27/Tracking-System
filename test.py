@@ -84,7 +84,7 @@ def log_issue(issue_code, name, description, issue_status, risk_type, subrisk_ty
     # Assuming 'issues.csv' is the file where you are saving your issues
     try:
         # Read the existing issues from the CSV
-        issues_df = pd.read_csv('Tracking-System/blob/main/issues.csv')
+        issues_df = pd.read_csv('https://github.com/marcusmk27/Tracking-System/blob/main/issues.csv',delimiter=';')
 
         # Create a new DataFrame for the new issue
         new_issue = pd.DataFrame([{
