@@ -60,12 +60,17 @@ def login(username, password):
 # Function to generate a unique code for an issue
 def generate_unique_code():
     issues_df = read_issues_from_csv()
+    
+    # Ensure 'issue_code' column exists
+    if 'issue_code' not in issues_df.columns:
+        issues_df['issue_code'] = []  # Add empty column if missing
+    
     while True:
         # Generate a random four-digit code
         code = str(random.randint(1000, 9999))
-
-        # Check if the code already exists in the CSV
-        if code not in issues_df['issue_code'].values:
+        
+        # Check if the code is unique
+        if code not in issues_df['issue_code'].astype(str).values:
             return code
 
 # Function to log an issue
