@@ -199,7 +199,7 @@ def main():
                           agl_rating, assurance_provider, due_date, financially_implicated, issuer_surname,
                           issuer_email, st.session_state.username)
                 st.success("Issue logged successfully!")
-                df= pd.read_csv('C:/Users/AB033NI/Downloads/New folder 1/New folder/issues.csv')
+                df= pd.read_csv('Tracking-System/blob/main/issues.csv')
                 st.write(df.tail(20))
         else:
             st.warning("Please login to log an issue.")
