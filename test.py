@@ -212,7 +212,7 @@ def main():
             issuer_email = st.text_input("Issuer Email")
             
             if st.button("Log Issue"):
-                log_issue(issue_code, name, description, issue_status, risk_type, subrisk_type, business_unit, bu_rating,
+                log_issue(issue_code, name, description, issue_status, principal_risk_type, subrisk_type, business_unit, bu_rating,
                           agl_rating, assurance_provider, due_date, financially_implicated,review_name, 
                           issue_number_and_title, date_submitted_to_risk_assurance, ra_reviewers, closure_email_or_feedback_date, issuer_name,
                           issuer_surname, issuer_email, st.session_state.username)
@@ -242,7 +242,6 @@ def main():
             new_assurance_provider = st.selectbox("Assurance Provider", ["Internal Audit", "External Audit", "GSA"])
             new_due_date = st.date_input("Due Date")
             new_financially_implicated = st.radio("Financial Implication?", ["Yes", "No"])
-            new_assurance_provider = st.text_input("Assurance Provider")
             new_review_name = st.text_input("Review Name")
             new_issue_number_and_title = st.text_input("Issue Number and Title")
             new_date_submitted_to_risk_assurance = st.date_input("Date Submitted to Risk Assurance")
@@ -250,8 +249,9 @@ def main():
             new_closure_email_or_feedback_date = st.date_input("Closure Email/Feedback Date")
 
             if st.button("Update Status"):
-                update_issue_status(issue_id, new_status, new_risk_type, new_subrisk_type, new_bu_rating,
-                                    new_agl_rating, new_assurance_provider, new_due_date, new_financially_implicated)
+                update_issue_status(issue_id, new_status, new_principal_risk_type, new_subrisk_type, new_business_unit, new_bu_rating,
+                                    new_agl_rating, new_assurance_provider, new_due_date, new_financially_implicated, new_review_name, 
+                                    new_issue_number_and_title, new_date_submitted_to_risk_assurance, new_ra_reviewers, new_closure_email_or_feedback_date)
                 st.success("Issue status updated successfully!")
 
 if __name__ == "__main__":
