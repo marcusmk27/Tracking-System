@@ -199,7 +199,7 @@ def main():
             business_unit = st.selectbox("BU",["FAK","ALAK","LIFESA","ALB","ALZ","NBFS","AIC", "GAM","IDIRECT","INSTANT LIFE","AL"])
             bu_rating = st.selectbox("BU Rating", ["Limited", "Major", "Moderate", "Critical"])
             agl_rating = st.selectbox("AGL Rating", ["Limited", "Major", "Moderate", "Critical"])
-            assurance_provider = st.selectbox("Assurance Provider", ("Assurance Provider", ["2LOD Risk", "External Audit", "Internal Audit", "GSA"]))
+            assurance_provider = st.selectbox("Assurance Provider", ["2LOD Risk", "External Audit", "Internal Audit", "GSA"])
             due_date = st.date_input("Due Date")
             financially_implicated = st.radio("Financial Implication?", ["Yes", "No"])
             review_name = st.text_input("Review Name", "")
