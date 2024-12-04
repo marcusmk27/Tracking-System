@@ -1,4 +1,4 @@
-issue_code,name,description,issue_status,risk_type,subrisk_type,business_Unit,bu_rating,agl_rating,assurance_provider,due_date,financially_implicated,issuer_surname,issuer_email,username
+issue_code,name,description,issue_status,principal_risk_type,subrisk_type,bu_rating,agl_rating,assurance_provider,due_date,financially_implicated,issuer_surname,issuer_email,username
 3314,,,Open,Operational,Technology,Limited,Limited,Internal Audit,11/26/2024,Yes,,Temporary View,Marcus
 9746,,,Open,Operational,Technology,Limited,Limited,Internal Audit,11/26/2024,Yes,,Temporary View,Marcus
 8915,,tempo,Open,Operational,Technology,Limited,Limited,Internal Audit,11/26/2024,No,,Temporary View,Marcus
