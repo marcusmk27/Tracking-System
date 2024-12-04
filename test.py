@@ -146,9 +146,11 @@ def update_issue_status(issue_id, issue_status, risk_type, subrisk_type, bu_rati
     issues_df = read_issues_from_csv()
     
     # Update the issue where the 'id' matches
-    issues_df.loc[issues_df['id'] == issue_id, ['issue_status', 'risk_type', 'subrisk_type', 
+    issues_df.loc[issues_df['id'] == issue_id, ['issue_status', 'risk_type', 'subrisk_type', 'business_unit',
                                                  'bu_rating', 'agl_rating', 'assurance_provider', 
-                                                 'due_date', 'financially_implicated']] = \
+                                                 'due_date', 'financially_implicated', 'Assurance_Provider', 'Review_Name',
+                                                'Issue_Number_and_Title', 'Date_Submitted_to_Risk_Assurance', 
+                                                'RA_Reviewers', 'Closure_email_or_Feedback_date']] = \
         [issue_status, risk_type, subrisk_type, bu_rating, agl_rating, assurance_provider, due_date, financially_implicated]
     
     save_issues_to_csv(issues_df)
@@ -194,11 +196,19 @@ def main():
             issue_status = st.selectbox("Issue Status", ["Open", "Closed", "Risk Accepted", "Overdue"])
             risk_type = st.selectbox("Risk Type", ["Operational", "Insurance", "Compliance", "Model Risk"])
             subrisk_type = st.selectbox("Subrisk Type", ["Technology", "Compliance", "Financial", "Operational"])
+            business_unit = st.text_input("Business_Unit")
             bu_rating = st.selectbox("BU Rating", ["Limited", "Moderate", "Critical"])
             agl_rating = st.selectbox("AGL Rating", ["Limited", "Moderate", "Critical"])
             assurance_provider = st.selectbox("Assurance Provider", ["Internal Audit", "External Audit", "GSA"])
             due_date = st.date_input("Due Date")
             financially_implicated = st.radio("Financial Implication?", ["Yes", "No"])
+            assurance_provider = st.text_input("Assurance_Provider")
+            review_name = st.text_input("Review_Name")
+            issue_number_and_title = st.text_input("Issue_Number_and_Title")
+            date_submitted_to_risk_assurance = st.date_input("Date_Submitted_to_Risk_Assurance")
+            ra_reviewers = st.selectbox("RA_Reviewers", ["Thejal Kusial", "Sibongile Lebeko"])
+            closure_email_or_feedback_date = st.date_input("Closure_email_or_Feedback_date")
+            issuer_name = st.text_input("Issuer Name")
             issuer_surname = st.text_input("Issuer Surname")
             issuer_email = st.text_input("Issuer Email")
             
