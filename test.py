@@ -77,8 +77,8 @@ def generate_unique_code():
 import pandas as pd
 
 # Function to log an issue (fixing the append issue)
-def log_issue(issue_code, name, description, issue_status, risk_type, subrisk_type, bu_rating,
-              agl_rating, assurance_provider, due_date, financially_implicated, issuer_surname, 
+def log_issue(issue_code, name, description, issue_status, risk_type, subrisk_type, Business_Unit, bu_rating,
+              agl_rating, assurance_provider, due_date, financially_implicated, Assurance_Provider, Review_Name, Issue_Number_and_Title, Date_Submitted_to_Risk_Assurance, RA_Reviewers, Closure_email/Feedback_date, issuer_name, issuer_surname, 
               issuer_email, username):
 
     # Assuming 'issues.csv' is the file where you are saving your issues
@@ -94,7 +94,7 @@ def log_issue(issue_code, name, description, issue_status, risk_type, subrisk_ty
             'issue_status': issue_status,
             'risk_type': risk_type,
             'subrisk_type': subrisk_type,
-            'BU': BU,
+            'Business_Unit': Business_Unit,
             'bu_rating': bu_rating,
             'agl_rating': agl_rating,
             'assurance_provider': assurance_provider,
