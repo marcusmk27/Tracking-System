@@ -124,10 +124,30 @@ def log_issue(issue_code, name, description, issue_status, risk_type, subrisk_ty
 
 
 # Function to view all issues
+import pandas as pd
+
+# Function to read and view all issues
 def view_all_issues():
-    issues_df =read_issues_from_csv()
-    
-    return issues_df.head()
+    try:
+        # Attempt to read the CSV file
+        issues_df = read_issues_from_csv()
+
+        # Check if the DataFrame is empty
+        if issues_df.empty:
+            return pd.DataFrame()  # Return an empty DataFrame if no issues found
+
+        return issues_df.head()  # Return the first few rows of the DataFrame
+
+    except FileNotFoundError:
+        # Handle the case where the CSV file does not exist
+        st.error("Error: Issues file not found. Please ensure the file exists.")
+        return pd.DataFrame()  # Return an empty DataFrame
+
+    except Exception as e:
+        # Handle other exceptions
+        st.error(f"An unexpected error occurred: {e}")
+        return pd.DataFrame()  # Return an empty DataFrame
+
 
 # Function to update an issue description
 def update_issue(issue_id, new_description):
