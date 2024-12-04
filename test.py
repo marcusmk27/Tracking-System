@@ -77,8 +77,8 @@ def generate_unique_code():
 import pandas as pd
 
 # Function to log an issue (fixing the append issue)
-def log_issue(issue_code, name, description, issue_status, risk_type, subrisk_type, Business_Unit, bu_rating,
-              agl_rating, assurance_provider, due_date, financially_implicated, Assurance_Provider, Review_Name, Issue_Number_and_Title, Date_Submitted_to_Risk_Assurance, RA_Reviewers, Closure_email_or_Feedback_date, issuer_name, issuer_surname, 
+def log_issue(issue_code, name, description, issue_status, risk_type, subrisk_type, business_unit, bu_rating,
+              agl_rating, assurance_provider, due_date, financially_implicated, review_name, issue_number_and_title, date_submitted_to_risk_assurance, ra_reviewers, closure_email_or_feedback_date, issuer_name, issuer_surname, 
               issuer_email, username):
 
     # Assuming 'issues.csv' is the file where you are saving your issues
@@ -92,20 +92,19 @@ def log_issue(issue_code, name, description, issue_status, risk_type, subrisk_ty
             'name': name,
             'description': description,
             'issue_status': issue_status,
-            'risk_type': risk_type,
+            'principal_risk_type': principal_risk_type,
             'subrisk_type': subrisk_type,
-            'Business_Unit': Business_Unit,
+            'business_Unit': Business_Unit,
             'bu_rating': bu_rating,
             'agl_rating': agl_rating,
             'assurance_provider': assurance_provider,
             'due_date': due_date,
             'financially_implicated': financially_implicated,
-            'Assurance_Provider': Assurance_Provider,
-            'Review_Name': Review_Name,
-            'Issue_Number_and_Title': Issue_Number_and_Title,
-            'Date_Submitted_to_Risk_Assurance': Date_Submitted_to_Risk_Assurance,
-            'RA_Reviewers': RA_Reviewers,
-            'Closure_email_or_Feedback_date': Closure_email/Feedback_date,
+            'review_name': Review_Name,
+            'issue_number_and_Title': Issue_Number_and_Title,
+            'date_submitted_to_risk_assurance': Date_Submitted_to_Risk_Assurance,
+            'ra_reviewers': RA_Reviewers,
+            'closure_email_or_feedback_date': Closure_email/Feedback_date,
             'issuer_name': issuer_name,
             'issuer_surname': issuer_surname,
             'issuer_email': issuer_email,
@@ -146,12 +145,12 @@ def update_issue_status(issue_id, issue_status, risk_type, subrisk_type, bu_rati
     issues_df = read_issues_from_csv()
     
     # Update the issue where the 'id' matches
-    issues_df.loc[issues_df['id'] == issue_id, ['issue_status', 'risk_type', 'subrisk_type', 'business_unit',
+    issues_df.loc[issues_df['id'] == issue_id, ['issue_status', 'principal_risk_type', 'subrisk_type', 'business_unit',
                                                  'bu_rating', 'agl_rating', 'assurance_provider', 
-                                                 'due_date', 'financially_implicated', 'Assurance_Provider', 'Review_Name',
-                                                'Issue_Number_and_Title', 'Date_Submitted_to_Risk_Assurance', 
-                                                'RA_Reviewers', 'Closure_email_or_Feedback_date']] = \
-        [issue_status, risk_type, subrisk_type, bu_rating, agl_rating, assurance_provider, due_date, financially_implicated]
+                                                 'due_date', 'financially_implicated', 'review_name',
+                                                'issue_number_and_title', 'date_submitted_to_risk_assurance', 
+                                                'ra_reviewers', 'closure_email_or_feedback_date']] = \
+        [issue_status, principal_risk_type, subrisk_type, business_unit, bu_rating, agl_rating, assurance_provider, due_date, financially_implicated, review_name, issue_number_and_title, date_submitted_to_risk_assurance, ra_reviewers, closure_email_or_feedback_date,]
     
     save_issues_to_csv(issues_df)
     return "Issue status updated successfully!"
@@ -194,7 +193,7 @@ def main():
             name = st.text_input("Name")
             description = st.text_area("Description")
             issue_status = st.selectbox("Issue Status", ["Open", "Closed", "Risk Accepted", "Overdue"])
-            risk_type = st.selectbox("Risk Type", ["Operational", "Insurance", "Compliance", "Model Risk"])
+            principal_risk_type = st.selectbox("Principal Risk Type", ["Operational", "Insurance", "Compliance", "Model Risk"])
             subrisk_type = st.selectbox("Subrisk Type", ["Technology", "Compliance", "Financial", "Operational"])
             business_unit = st.text_input("Business_Unit")
             bu_rating = st.selectbox("BU Rating", ["Limited", "Moderate", "Critical"])
@@ -202,20 +201,21 @@ def main():
             assurance_provider = st.selectbox("Assurance Provider", ["Internal Audit", "External Audit", "GSA"])
             due_date = st.date_input("Due Date")
             financially_implicated = st.radio("Financial Implication?", ["Yes", "No"])
-            assurance_provider = st.text_input("Assurance_Provider")
-            review_name = st.text_input("Review_Name")
-            issue_number_and_title = st.text_input("Issue_Number_and_Title")
-            date_submitted_to_risk_assurance = st.date_input("Date_Submitted_to_Risk_Assurance")
-            ra_reviewers = st.selectbox("RA_Reviewers", ["Thejal Kusial", "Sibongile Lebeko"])
-            closure_email_or_feedback_date = st.date_input("Closure_email_or_Feedback_date")
+            assurance_provider = st.text_input("Assurance Provider")
+            review_name = st.text_input("Review Name")
+            issue_number_and_title = st.text_input("Issue Number and Title")
+            date_submitted_to_risk_assurance = st.date_input("Date Submitted to Risk Assurance")
+            ra_reviewers = st.selectbox("RA Reviewers", ["Thejal Kusial", "Sibongile Lebeko"])
+            closure_email_or_feedback_date = st.date_input("Closure Email/Feedback Date")
             issuer_name = st.text_input("Issuer Name")
             issuer_surname = st.text_input("Issuer Surname")
             issuer_email = st.text_input("Issuer Email")
             
             if st.button("Log Issue"):
-                log_issue(issue_code, name, description, issue_status, risk_type, subrisk_type, bu_rating,
-                          agl_rating, assurance_provider, due_date, financially_implicated, issuer_surname,
-                          issuer_email, st.session_state.username)
+                log_issue(issue_code, name, description, issue_status, risk_type, subrisk_type, business_unit, bu_rating,
+                          agl_rating, assurance_provider, due_date, financially_implicated,review_name, 
+                          issue_number_and_title, date_submitted_to_risk_assurance, ra_reviewers, closure_email_or_feedback_date, issuer_name,
+                          issuer_surname, issuer_email, st.session_state.username)
                 st.success("Issue logged successfully!")
                 df= pd.read_csv('https://raw.githubusercontent.com/marcusmk27/Tracking-System/main/issues.csv')
                 st.write(df.tail(20))
@@ -234,13 +234,20 @@ def main():
                 st.success("Issue description updated successfully!")
             
             new_status = st.selectbox("Update Issue Status", ["Open", "Closed", "Risk Accepted", "Overdue"])
-            new_risk_type = st.selectbox("Risk Type", ["Operational", "Insurance", "Compliance", "Model Risk"])
+            new_principal_risk_type = st.selectbox("Risk Type", ["Operational", "Insurance", "Compliance", "Model Risk"])
             new_subrisk_type = st.selectbox("Subrisk Type", ["Technology", "Compliance", "Financial", "Operational"])
+            new_business_unit = st.text_input("Business_Unit")
             new_bu_rating = st.selectbox("BU Rating", ["Limited", "Moderate", "Critical"])
             new_agl_rating = st.selectbox("AGL Rating", ["Limited", "Moderate", "Critical"])
             new_assurance_provider = st.selectbox("Assurance Provider", ["Internal Audit", "External Audit", "GSA"])
             new_due_date = st.date_input("Due Date")
             new_financially_implicated = st.radio("Financial Implication?", ["Yes", "No"])
+            new_assurance_provider = st.text_input("Assurance Provider")
+            new_review_name = st.text_input("Review Name")
+            new_issue_number_and_title = st.text_input("Issue Number and Title")
+            new_date_submitted_to_risk_assurance = st.date_input("Date Submitted to Risk Assurance")
+            new_ra_reviewers = st.selectbox("RA Reviewers", ["Thejal Kusial", "Sibongile Lebeko"])
+            new_closure_email_or_feedback_date = st.date_input("Closure Email/Feedback Date")
 
             if st.button("Update Status"):
                 update_issue_status(issue_id, new_status, new_risk_type, new_subrisk_type, new_bu_rating,
