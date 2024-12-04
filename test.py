@@ -124,29 +124,10 @@ def log_issue(issue_code, name, description, issue_status, risk_type, subrisk_ty
 
 
 # Function to view all issues
-import pandas as pd
-
-# Function to read and view all issues
 def view_all_issues():
-    try:
-        # Attempt to read the CSV file
-        issues_df = read_issues_from_csv()
-
-        # Check if the DataFrame is empty
-        if issues_df.empty:
-            return pd.DataFrame()  # Return an empty DataFrame if no issues found
-
-        return issues_df.head()  # Return the first few rows of the DataFrame
-
-    except FileNotFoundError:
-        # Handle the case where the CSV file does not exist
-        st.error("Error: Issues file not found. Please ensure the file exists.")
-        return pd.DataFrame()  # Return an empty DataFrame
-
-    except Exception as e:
-        # Handle other exceptions
-        st.error(f"An unexpected error occurred: {e}")
-        return pd.DataFrame()  # Return an empty DataFrame
+    issues_df =read_issues_from_csv()
+    
+    return issues_df.head()
 
 
 # Function to update an issue description
@@ -215,9 +196,9 @@ def main():
             issue_status = st.selectbox("Issue Status", ["Open", "Closed", "Risk Accepted", "Overdue"])
             principal_risk_type = st.selectbox("Principal Risk Type", ["Operational", "Insurance", "Compliance", "Model Risk"])
             subrisk_type = st.selectbox("Subrisk Type", ["Technology", "Compliance", "Financial", "Operational"])
-            business_unit = st.text_input("Business_Unit")
-            bu_rating = st.selectbox("BU Rating", ["Limited", "Moderate", "Critical"])
-            agl_rating = st.selectbox("AGL Rating", ["Limited", "Moderate", "Critical"])
+            business_unit = st.text_input("Business Unit")
+            bu_rating = st.selectbox("BU Rating", ["Limited", "Major", "Moderate", "Critical"])
+            agl_rating = st.selectbox("AGL Rating", ["Limited", "Major", "Moderate", "Critical"])
             assurance_provider = st.selectbox("Assurance Provider", ["Internal Audit", "External Audit", "GSA"])
             due_date = st.date_input("Due Date")
             financially_implicated = st.radio("Financial Implication?", ["Yes", "No"])
