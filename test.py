@@ -104,7 +104,7 @@ def log_issue(issue_code, name, description, issue_status, risk_type, subrisk_ty
             'issue_number_and_Title': Issue_Number_and_Title,
             'date_submitted_to_risk_assurance': Date_Submitted_to_Risk_Assurance,
             'ra_reviewers': RA_Reviewers,
-            'closure_email_or_feedback_date': Closure_email/Feedback_date,
+            'closure_email_or_feedback_date': Closure_email_or_Feedback_date,
             'issuer_name': issuer_name,
             'issuer_surname': issuer_surname,
             'issuer_email': issuer_email,
