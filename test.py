@@ -78,7 +78,7 @@ import pandas as pd
 
 # Function to log an issue (fixing the append issue)
 def log_issue(issue_code, name, description, issue_status, risk_type, subrisk_type, Business_Unit, bu_rating,
-              agl_rating, assurance_provider, due_date, financially_implicated, Assurance_Provider, Review_Name, Issue_Number_and_Title, Date_Submitted_to_Risk_Assurance, RA_Reviewers, Closure_email/Feedback_date, issuer_name, issuer_surname, 
+              agl_rating, assurance_provider, due_date, financially_implicated, Assurance_Provider, Review_Name, Issue_Number_and_Title, Date_Submitted_to_Risk_Assurance, RA_Reviewers, Closure_email_or_Feedback_date, issuer_name, issuer_surname, 
               issuer_email, username):
 
     # Assuming 'issues.csv' is the file where you are saving your issues
@@ -105,7 +105,7 @@ def log_issue(issue_code, name, description, issue_status, risk_type, subrisk_ty
             'Issue_Number_and_Title': Issue_Number_and_Title,
             'Date_Submitted_to_Risk_Assurance': Date_Submitted_to_Risk_Assurance,
             'RA_Reviewers': RA_Reviewers,
-            'Closure_email/Feedback_date': Closure_email/Feedback_date,
+            'Closure_email_or_Feedback_date': Closure_email/Feedback_date,
             'issuer_name': issuer_name,
             'issuer_surname': issuer_surname,
             'issuer_email': issuer_email,
