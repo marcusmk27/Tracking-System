@@ -94,14 +94,22 @@ def log_issue(issue_code, name, description, issue_status, risk_type, subrisk_ty
             'issue_status': issue_status,
             'risk_type': risk_type,
             'subrisk_type': subrisk_type,
+            'BU': BU,
             'bu_rating': bu_rating,
             'agl_rating': agl_rating,
             'assurance_provider': assurance_provider,
             'due_date': due_date,
             'financially_implicated': financially_implicated,
+            'Assurance_Provider': Assurance_Provider,
+            'Review_Name': Review_Name,
+            'Issue_Number_and_Title': Issue_Number_and_Title,
+            'Date_Submitted_to_Risk_Assurance': Date_Submitted_to_Risk_Assurance,
+            'RA_Reviewers': RA_Reviewers,
+            'Closure_email/Feedback_date': Closure_email/Feedback_date,
+            'issuer_name': issuer_name,
             'issuer_surname': issuer_surname,
             'issuer_email': issuer_email,
-            'username': username
+            'username': username,
         }])
 
         # Use pd.concat() to append the new issue to the existing DataFrame
