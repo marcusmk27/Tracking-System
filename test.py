@@ -168,22 +168,22 @@ def main():
         st.write(f"Selected Page: {page}")  # Debugging
     except Exception as e:
         st.error(f"Error initializing navigation: {e}")
-    try:
-        # Read the CSV file
-        df = pd.read_csv("issues.csv")
-        
-        # Extract data and columns
-        data = df.values.tolist()  # Convert DataFrame rows to list of lists
-        columns = df.columns.tolist()  # Extract column names as a list
-        
-        return data, columns
-    except FileNotFoundError:
-        return [], []  # File not found, return empty data
-    except pd.errors.EmptyDataError:
-        return [], []  # CSV file is empty, return empty data
-    except Exception as e:
-        print(f"An error occurred: {e}")
-        return [], []
+        try:
+            # Read the CSV file
+            df = pd.read_csv("issues.csv")
+            
+            # Extract data and columns
+            data = df.values.tolist()  # Convert DataFrame rows to list of lists
+            columns = df.columns.tolist()  # Extract column names as a list
+            
+            return data, columns
+        except FileNotFoundError:
+            return [], []  # File not found, return empty data
+        except pd.errors.EmptyDataError:
+            return [], []  # CSV file is empty, return empty data
+        except Exception as e:
+            print(f"An error occurred: {e}")
+            return [], []
 
     # Handle pages
     if page == 'View Current Issues':
