@@ -144,7 +144,7 @@ def update_issue(issue_id, new_description):
 def update_issue_status(issue_id, issue_status, risk_type, subrisk_type, bu_rating, agl_rating,
                         assurance_provider, due_date, financially_implicated, 'review_name',
                         'issue_number_and_title', 'date_submitted_to_risk_assurance', 
-                        'ra_reviewers', 'closure_email_or_feedback_date):
+                        'ra_reviewers', 'closure_email_or_feedback_date'):
     issues_df = read_issues_from_csv()
     
     # Update the issue where the 'id' matches
