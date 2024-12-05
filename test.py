@@ -168,8 +168,7 @@ def main():
         st.write(f"Selected Page: {page}")  # Debugging
     except Exception as e:
         st.error(f"Error initializing navigation: {e}")
-        return
-        try:
+    try:
         # Read the CSV file
         df = pd.read_csv("issues.csv")
         
