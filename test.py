@@ -6,7 +6,7 @@ import os
 import hashlib
 
 # Paths to your CSV files
-ISSUES_FILE = 'https://raw.githubusercontent.com/marcusmk27/Tracking-System/main/issues.csv'
+ISSUES_FILE = 'https://raw.githubusercontent.com/marcusmk27/Tracking-System/refs/heads/main/issues.csv'
 USERS_FILE = 'Tracking-System/blob/main/users.csv'
 
 # Helper function to read issues from CSV
@@ -84,7 +84,7 @@ def log_issue(issue_code, name, description, issue_status, risk_type, subrisk_ty
     # Assuming 'issues.csv' is the file where you are saving your issues
     try:
         # Read the existing issues from the CSV
-        issues_df = pd.read_csv('https://raw.githubusercontent.com/marcusmk27/Tracking-System/main/issues.csv')
+        issues_df = pd.read_csv('https://raw.githubusercontent.com/marcusmk27/Tracking-System/refs/heads/main/issues.csv')
 
         # Create a new DataFrame for the new issue
         new_issue = pd.DataFrame([{
