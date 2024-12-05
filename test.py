@@ -142,7 +142,9 @@ def update_issue(issue_id, new_description):
 
 # Function to update an issue status
 def update_issue_status(issue_id, issue_status, risk_type, subrisk_type, bu_rating, agl_rating,
-                        assurance_provider, due_date, financially_implicated):
+                        assurance_provider, due_date, financially_implicated, 'review_name',
+                        'issue_number_and_title', 'date_submitted_to_risk_assurance', 
+                        'ra_reviewers', 'closure_email_or_feedback_date):
     issues_df = read_issues_from_csv()
     
     # Update the issue where the 'id' matches
@@ -165,10 +167,17 @@ def main():
     # Sidebar Navigation
     page = st.sidebar.radio("Navigation", ["Login", "View Current Issues", "Log Issue", "Update Issue"])
     
-    if page == "View Current Issues":
-        st.header("Current Issues")
-        issues_df = view_all_issues()
-        st.write(issues_df.head(15))
+    if page=='View Current Issues':
+       
+        data,columns=view_all_issues()
+        df=pd.DataFrame(data,columns=columns)
+        dffiltered=st.text_input("...")
+        df_fil=df[df['issue_code']==dffiltered]
+        src_btn=st.button("Search")
+        if src_btn==True:
+            st.table(df_fil)
+        else:
+            st.table(df.head(5))
 
     if page == "Login":
         st.header("Login")
