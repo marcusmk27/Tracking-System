@@ -167,17 +167,26 @@ def main():
     # Sidebar Navigation
     page = st.sidebar.radio("Navigation", ["Login", "View Current Issues", "Log Issue", "Update Issue"])
     
-    if page=='View Current Issues':
-       
-        data,columns=view_all_issues()
-        df=pd.DataFrame(data,columns=columns)
-        dffiltered=st.text_input("...")
-        df_fil=df[df['issue_code']==dffiltered]
-        src_btn=st.button("Search")
-        if src_btn==True:
-            st.table(df_fil)
+if page == 'View Current Issues':
+    try:
+        data, columns = view_all_issues()
+        if not data or not columns:
+            st.error("No data or columns found!")
         else:
-            st.table(df.head(5))
+            df = pd.DataFrame(data, columns=columns)
+            dffiltered = st.text_input("Enter issue code to filter:")
+            if 'issue_code' in df.columns:
+                src_btn = st.button("Search")
+                if src_btn:
+                    df_fil = df[df['issue_code'] == dffiltered]
+                    st.table(df_fil)
+                else:
+                    st.table(df.head(5))
+            else:
+                st.error("The required column 'issue_code' does not exist in the dataset!")
+    except Exception as e:
+        st.error(f"An error occurred: {e}")
+
 
     if page == "Login":
         st.header("Login")
