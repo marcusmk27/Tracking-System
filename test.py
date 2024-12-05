@@ -168,7 +168,6 @@ def main():
         st.write(f"Selected Page: {page}")  # Debugging
     except Exception as e:
         st.error(f"Error initializing navigation: {e}")
-        try:
 
     # Handle pages
     if page == "View Current Issues":
