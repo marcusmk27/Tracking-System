@@ -22,6 +22,18 @@ def get_csv_from_github():
     headers = {"Authorization": f"token {GITHUB_TOKEN}"}
     response = requests.get(API_URL, headers=headers)
 
+        # Check if the response is successful
+    if response.status_code == 200:
+        file_data = response.json()
+        # Decode the base64 content of the file
+        content = b64decode(file_data['content']).decode('utf-8')
+        # Load the content as a pandas DataFrame
+        return pd.read_csv(pd.compat.StringIO(content))
+    else:
+        st.error(f"Failed to fetch the CSV file from GitHub. Status code: {response.status_code}")
+        st.error(f"Response content: {response.text}")
+        return pd.DataFrame(columns=['issue_code','name','description','issue_status',	'principal_risk_type','subrisk_type','business_unit','bu_rating','agl_rating','assurance_provider','due_date','financially_implicated','review_name','issue_number_and_Title','date_submitted_to_risk_assurance','ra_reviewers','closure_email_or_feedback_date','issuer_name','issuer_surname','issuer_email','username'])
+
 # Paths to your CSV files
 ISSUES_FILE = 'https://raw.githubusercontent.com/marcusmk27/Tracking-System/refs/heads/main/issues.csv'
 USERS_FILE = 'Tracking-System/blob/main/users.csv'
