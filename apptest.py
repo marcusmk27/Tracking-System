@@ -4,9 +4,9 @@ import requests
 from base64 import b64decode
 
 # GitHub API details
-GITHUB_TOKEN = "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"  # Replace with your GitHub token
-GITHUB_USERNAME = "lerekoqholosha"  # Replace with your GitHub username
-REPO_NAME = "test-streamlit"  # Replace with your GitHub repo name
+GITHUB_TOKEN = "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"  # Replace with your GitHub token
+GITHUB_USERNAME = "MarcusMk27"  # Replace with your GitHub username
+REPO_NAME = "Tracking-System"  # Replace with your GitHub repo name
 FILE_PATH = "users.csv"  # Path to the file in the repo
 BRANCH_NAME = "main"  # Branch you want to commit to
 
