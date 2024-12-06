@@ -222,7 +222,7 @@ def main():
                           issue_number_and_title, date_submitted_to_risk_assurance, ra_reviewers, closure_email_or_feedback_date, issuer_name,
                           issuer_surname, issuer_email, st.session_state.username)
                 st.success("Issue logged successfully!")
-                df= pd.read_csv('https://raw.githubusercontent.com/marcusmk27/Tracking-System/main/issues.csv')
+                df= pd.read_csv('https://raw.githubusercontent.com/marcusmk27/Tracking-System/refs/heads/main/issues.csv')
                 st.write(df.tail(20))
         else:
             st.warning("Please login to log an issue.")
