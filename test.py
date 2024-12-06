@@ -4,9 +4,6 @@ import random
 from hashlib import sha256
 import os
 import hashlib
-
-import streamlit as st
-import pandas as pd
 import requests
 from base64 import b64decode
 
