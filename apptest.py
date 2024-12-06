@@ -1,38 +1,44 @@
 import streamlit as st
 import pandas as pd
 import requests
-from base64 import b64encode
+from base64 import b64decode
 
 # GitHub API details
 GITHUB_TOKEN = "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"  # Replace with your GitHub token
-GITHUB_USERNAME = "marcusmk27"  # Replace with your GitHub username
-REPO_NAME = "Tracking-System"  # Replace with your GitHub repo name
-FILE_PATH = "https://raw.githubusercontent.com/marcusmk27/Tracking-System/refs/heads/main/testfile.csv"  # Path to the file in the repo
+GITHUB_USERNAME = "lerekoqholosha"  # Replace with your GitHub username
+REPO_NAME = "test-streamlit"  # Replace with your GitHub repo name
+FILE_PATH = "users.csv"  # Path to the file in the repo
 BRANCH_NAME = "main"  # Branch you want to commit to
 
-# GitHub API URL for accessing the file
+# GitHub API URL for accessing the file (correct URL)
 API_URL = f"https://api.github.com/repos/{GITHUB_USERNAME}/{REPO_NAME}/contents/{FILE_PATH}"
 
 # Function to get the CSV file from GitHub
 def get_csv_from_github():
     headers = {"Authorization": f"token {GITHUB_TOKEN}"}
     response = requests.get(API_URL, headers=headers)
+    
+    # Check if the response is successful
     if response.status_code == 200:
         file_data = response.json()
-        content = file_data['content']
-        decoded_content = b64encode(content.encode()).decode()
-        return pd.read_csv(pd.compat.StringIO(decoded_content))
+        # Decode the base64 content of the file
+        content = b64decode(file_data['content']).decode('utf-8')
+        # Load the content as a pandas DataFrame
+        return pd.read_csv(pd.compat.StringIO(content))
     else:
-        st.error("Failed to fetch the CSV file from GitHub.")
+        st.error(f"Failed to fetch the CSV file from GitHub. Status code: {response.status_code}")
+        st.error(f"Response content: {response.text}")
         return pd.DataFrame(columns=["username", "school", "age"])
 
 # Function to update the CSV file on GitHub
 def update_csv_on_github(updated_df):
     headers = {"Authorization": f"token {GITHUB_TOKEN}"}
     response = requests.get(API_URL, headers=headers)
+    
+    # Check if the response is successful
     if response.status_code == 200:
         file_data = response.json()
-        sha = file_data['sha']  # Get the SHA of the file
+        sha = file_data['sha']  # Get the SHA of the file to update it
 
         # Encode the new CSV content in base64
         new_content = updated_df.to_csv(index=False)
@@ -45,13 +51,16 @@ def update_csv_on_github(updated_df):
             "branch": BRANCH_NAME
         }
 
+        # Send PUT request to update the file on GitHub
         update_response = requests.put(API_URL, headers=headers, json=data)
         if update_response.status_code == 200:
             st.success("CSV file updated successfully!")
         else:
-            st.error("Failed to update the file on GitHub.")
+            st.error(f"Failed to update the file on GitHub. Status code: {update_response.status_code}")
+            st.error(f"Response content: {update_response.text}")
     else:
-        st.error("Failed to fetch file details from GitHub.")
+        st.error(f"Failed to fetch file details from GitHub. Status code: {response.status_code}")
+        st.error(f"Response content: {response.text}")
 
 # Streamlit app
 def app():
