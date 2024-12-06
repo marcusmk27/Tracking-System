@@ -12,7 +12,7 @@ USERS_FILE = 'Tracking-System/blob/main/users.csv'
 # Helper function to read issues from CSV
 def read_issues_from_csv():
     if os.path.exists(ISSUES_FILE):
-        return pd.read_csv(ISSUES_FILE,delimiter=";")
+        return pd.read_csv(ISSUES_FILE,delimiter=";",columns=['issue_code','name','description','issue_status',	'principal_risk_type',	'subrisk_type'	,'business_unit',	'bu_rating',	'agl_rating	','assurance_provider'	,'due_date	','financially_implicated',	'review_name'	,'issue_number_and_Title'	,'date_submitted_to_risk_assurance','ra_reviewers','closure_email_or_feedback_date','issuer_name','issuer_surname','issuer_email','username'])
     else:
         # If the file does not exist, return an empty DataFrame
         return pd.DataFrame()
