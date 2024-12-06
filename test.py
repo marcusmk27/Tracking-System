@@ -5,6 +5,26 @@ from hashlib import sha256
 import os
 import hashlib
 
+import streamlit as st
+import pandas as pd
+import requests
+from base64 import b64decode
+
+# GitHub API details
+GITHUB_TOKEN = "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"  # Replace with your GitHub token
+GITHUB_USERNAME = "MarcusMk27"  # Replace with your GitHub username
+REPO_NAME = "Tracking-System"  # Replace with your GitHub repo name
+FILE_PATH = "users.csv"  # Path to the file in the repo
+BRANCH_NAME = "main"  # Branch you want to commit to
+
+# GitHub API URL for accessing the file (correct URL)
+API_URL = f"https://api.github.com/repos/{GITHUB_USERNAME}/{REPO_NAME}/contents/{FILE_PATH}"
+
+# Function to get the CSV file from GitHub
+def get_csv_from_github():
+    headers = {"Authorization": f"token {GITHUB_TOKEN}"}
+    response = requests.get(API_URL, headers=headers)
+
 # Paths to your CSV files
 ISSUES_FILE = 'https://raw.githubusercontent.com/marcusmk27/Tracking-System/refs/heads/main/issues.csv'
 USERS_FILE = 'Tracking-System/blob/main/users.csv'
