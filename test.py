@@ -172,7 +172,8 @@ def main():
     # Handle pages
     if page == "View Current Issues":
         st.header("Current Issues")
-        issues_df = view_all_issues()
+        issues_df =pd.read_csv('https://raw.githubusercontent.com/marcusmk27/Tracking-System/refs/heads/main/issues.csv',delimeter=';
+    ')# view_all_issues()
         st.write(issues_df.head(15))
 
     if page == "Login":
