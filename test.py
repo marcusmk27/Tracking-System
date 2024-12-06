@@ -14,58 +14,6 @@ REPO_NAME = "Tracking-System"  # Replace with your GitHub repo name
 FILE_PATH = "users.csv"  # Path to the file in the repo
 BRANCH_NAME = "main"  # Branch you want to commit to
 
-# GitHub API URL for accessing the file (correct URL)
-API_URL = f"https://api.github.com/repos/{GITHUB_USERNAME}/{REPO_NAME}/contents/{FILE_PATH}"
-
-# Function to get the CSV file from GitHub
-def get_csv_from_github():
-    headers = {"Authorization": f"token {GITHUB_TOKEN}"}
-    response = requests.get(API_URL, headers=headers)
-    
-    # Check if the response is successful
-    if response.status_code == 200:
-        file_data = response.json()
-        # Decode the base64 content of the file
-        content = b64decode(file_data['content']).decode('utf-8')
-        # Load the content as a pandas DataFrame
-        return pd.read_csv(pd.compat.StringIO(content))
-    else:
-        st.error(f"Failed to fetch the CSV file from GitHub. Status code: {response.status_code}")
-        st.error(f"Response content: {response.text}")
-        return pd.DataFrame(columns=['issue_code','name','description','issue_status',	'principal_risk_type','subrisk_type','business_unit','bu_rating','agl_rating','assurance_provider','due_date','financially_implicated','review_name','issue_number_and_Title','date_submitted_to_risk_assurance','ra_reviewers','closure_email_or_feedback_date','issuer_name','issuer_surname','issuer_email','username'])
-
-# Function to update the CSV file on GitHub
-def update_csv_on_github(updated_df):
-    headers = {"Authorization": f"token {GITHUB_TOKEN}"}
-    response = requests.get(API_URL, headers=headers)
-    
-    # Check if the response is successful
-    if response.status_code == 200:
-        file_data = response.json()
-        sha = file_data['sha']  # Get the SHA of the file to update it
-
-        # Encode the new CSV content in base64
-        new_content = updated_df.to_csv(index=False)
-        encoded_content = b64encode(new_content.encode()).decode()
-
-        data = {
-            "message": "Updated CSV file via Streamlit",
-            "sha": sha,
-            "content": encoded_content,
-            "branch": BRANCH_NAME
-        }
-
-        # Send PUT request to update the file on GitHub
-        update_response = requests.put(API_URL, headers=headers, json=data)
-        if update_response.status_code == 200:
-            st.success("CSV file updated successfully!")
-        else:
-            st.error(f"Failed to update the file on GitHub. Status code: {update_response.status_code}")
-            st.error(f"Response content: {update_response.text}")
-    else:
-        st.error(f"Failed to fetch file details from GitHub. Status code: {response.status_code}")
-        st.error(f"Response content: {response.text}")
-
 # Paths to your CSV files
 ISSUES_FILE = 'https://raw.githubusercontent.com/marcusmk27/Tracking-System/refs/heads/main/issues.csv'
 USERS_FILE = 'Tracking-System/blob/main/users.csv'
