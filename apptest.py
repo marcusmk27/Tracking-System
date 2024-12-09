@@ -263,8 +263,6 @@ def main():
         # Display the data
         st.write("Issues in the Database:")
         st.write(df)
-        for issue in issues:
-            st.write(issue)
 
     elif page == "Update Issue":
         st.header("Update Issue")
