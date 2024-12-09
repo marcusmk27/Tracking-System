@@ -267,7 +267,7 @@ def main():
     elif page == "Update Issue":
         st.header("Update Issue")
         issue_code = st.text_input("Enter Issue Code to Update")
-        new_status = st.selectbox("New Status", ["Open", "Closed"])
+        new_status = st.selectbox("New Status", ["Open", "Closed","Risk Accepted", "Overdue"])
         new_description = st.text_area("New Description")
 
         if st.button("Update Issue"):
