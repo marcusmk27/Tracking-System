@@ -229,7 +229,7 @@ def main():
             name = st.text_input("Issue Name")
             description = st.text_area("Description")
             issue_status = st.selectbox("Status", ["Open", "Closed","Risk Accepted", "Overdue"])
-            principal_risk_type.st.text_input("Risk Type")
+            principal_risk_type=st.text_input("Risk Type")
             subrisk_type =st.text_input("subrisk_type")
             business_unit= st.text_input(" business_unit")
             bu_rating=st.text_input("bu_rating")
@@ -239,7 +239,7 @@ def main():
             financially_implicated=st.selectbox(" financially_implicated",["Yes","NO"])
             review_name=st.text_input("review_name")
             issue_number_and_title=st.text_input("issue_number_and_title")
-            date_submitted_to_risk_assurance=st.text_inpu("date_submitted_to_risk_assurance")
+            date_submitted_to_risk_assurance=st.text_input("date_submitted_to_risk_assurance")
             ra_reviewers=st.text_input("ra_reviewers")
             closure_email_or_feedback_date=st.date_input("closure_email_or_feedback_date")
             issuer_name=st.text_input("issuer_name")
@@ -247,7 +247,7 @@ def main():
             issuer_email=st.text_input("issuer_email")
 
             if st.button("Log Issue"):
-                result = log_issue(issue_code, name, description, issue_status, principal_risk_type,subrisk_type, business_unit,   bu_rating,  agl_rating, assurance_provider, due_date,  financially_implicated, review_name, issue_number_and_title, , date_submitted_to_risk_assurance, date_submitted_to_risk_assurance, ra_reviewers, closure_email_or_feedback_date, issuer_name, issuer_email, st.session_state.username)
+                result = log_issue(issue_code, name, description, issue_status, principal_risk_type,subrisk_type, business_unit,   bu_rating,  agl_rating, assurance_provider, due_date,  financially_implicated, review_name, issue_number_and_title, date_submitted_to_risk_assurance, date_submitted_to_risk_assurance, ra_reviewers, closure_email_or_feedback_date, issuer_name, issuer_email, st.session_state.username)
                 st.success(result)
         else:
             st.warning("Please login to log an issue.")
